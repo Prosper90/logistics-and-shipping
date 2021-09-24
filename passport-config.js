@@ -4,7 +4,6 @@ const Admin = require("./model-database/admindb");
 const bcrypt = require("bcrypt");
 
 
-
 function initialize(passport){
 passport.use(new LocalStrategy(  { usernameField: 'email', passwordField: 'password',  passReqToCallback: true },
 async function(req, email, password,  done){
@@ -20,7 +19,7 @@ async function(req, email, password,  done){
    await Admin.findOne({ email: email }, function(err, user){
      if (err)  return done(err);
      //check if user exist
-       console.log(user);
+       //console.log(user);
      if(!user) {
       // console.log("user false");
        return done(null, false, {message: "Wrong Email"});
@@ -46,10 +45,11 @@ async function(req, email, password,  done){
     //end of check for admin
 
 
-   try{
 //finding client user in database
-await User.findOne({ email: email }, async function(err, user){
-//console.log(user);
+console.log("user entered");
+//console.log(email);
+await User.findOne({ email: email }, async (err, user) => {
+  //console.log(user);
   if (err)  return done(err);
   //check if user exist
   if(!user) {
@@ -66,14 +66,8 @@ await User.findOne({ email: email }, async function(err, user){
      }
 
 
-  })
-}catch(err){
-  console.log(err);
-  process.exit(1);
-};
+  });
  //end of client check
-
-
 
 
 }));
@@ -94,10 +88,7 @@ done(null, user.id);
 //deserialize
 passport.deserializeUser( async function(id, done) {
 
-
-
-
- let admin = await Admin.findOne({ _id: id },  function(err, user){
+ let admin = await Admin.findOne({ _id: id }, async function(err, user){
    //console.log(user);
      if (err)  return done(err);
      }).catch(err => console.log(err));

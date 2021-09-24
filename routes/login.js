@@ -16,10 +16,12 @@ router.get("/", function(req, res){
 
 router.post("/", passport.authenticate("local", {
 failureFlash: true,
-failureRedirect: "/login",
-successRedirect: "/client"
-})
-);
+failureRedirect: "/login"
+}), (req, res, next) => {
+  //console.log(req.user);
+  res.redirect('/client');
+});
+
 
 
 
